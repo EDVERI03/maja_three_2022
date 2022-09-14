@@ -1,4 +1,7 @@
 <script>
+import { goto } from "$app/navigation";
+
+
     /**
      * @type any
      */
@@ -19,6 +22,6 @@
 
     <h1>LogOut</h1>
 
-    <button type="submit" on:click={() => {fetch("/login", {method: "DELETE"})}}> LogOut</button>
+    <button type="submit" on:click={() => {fetch("/login", {method: "DELETE"}).then(()=>goto("/",{replaceState: true}))}}> LogOut</button>
 
 </div>

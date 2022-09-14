@@ -31,7 +31,8 @@ export async function POST({ request, setHeaders }) {
        
     } else return {errors: {message: "User does not exist"}}
 
-    return {errors: {message: "success"}}
+
+    return {location: "/"}
 }
 
 /** @type {import('@sveltejs/kit').Action} */
