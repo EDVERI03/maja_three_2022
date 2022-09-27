@@ -1,14 +1,23 @@
 import { invalid, redirect } from '@sveltejs/kit';
-import type { Actions } from './$types';
+import type { Actions, PageServerLoad } from './$types';
 import * as database from '$lib/database'
+import type Page from './+page.svelte';
+
+const data=new Map<string,number>()
+
+export const load: PageServerLoad = ({locals})=>{
+	return {tries: data.get(locals.tempid)??0}
+
+}
 
 export const actions: Actions = {
 	login: async ({ request, locals, cookies }) => {
 		const form = await request.formData();
+		data.set(locals.userid,(data.get(locals.tempid)??0) + 1)
 
 		// TODO: Implement login
 		// Check if password and username
-		// exists and is correct
+		// exists and is correct 
 
 		const client = await database.connect();
     	const db = client.db("test"); 

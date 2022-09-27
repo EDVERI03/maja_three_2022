@@ -10,7 +10,7 @@ export const actions: Actions = {
 		// Check if ustername already exist etc.
 
 		const client = await database.connect();
-    	const db = client.db("test"); 
+    	const db = client.db("test");  
     	const collection = db.collection("users");
 
 		if(form.get("username") && form.get("password")) {

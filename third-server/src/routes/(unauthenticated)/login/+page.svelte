@@ -1,10 +1,13 @@
 <script lang="ts">
-	import type { ActionData } from "./$types";
+    import { enhance } from "$app/forms";
+	import type { ActionData, PageServerData } from "./$types";
 
-	export let form: any;
+	export let data: PageServerData;
+	export let form: ActionData;
 </script>
 
-<form method="POST" action="?/login">
+<form use:enhance method="POST" action="?/login">
+	<p>{data.tries}</p>
 	<input type="text" name="username" />
 	<input type="password" name="password" />
 	<button>LOGIN</button>
