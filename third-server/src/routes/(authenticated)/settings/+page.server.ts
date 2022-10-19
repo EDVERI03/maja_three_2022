@@ -44,4 +44,13 @@ export const actions: Actions = {
 		throw redirect(302, '/register')
 
 	},
+	deletehistory: async ({locals}) => {
+
+		const client = await database.connect();
+		const db = client.db("test")
+		const collection = db.collection("users")
+
+		collection.updateOne({sessionid: locals.userid}, {$set: {lastVisited: []}})
+
+	}
 };

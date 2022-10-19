@@ -20,3 +20,7 @@
 <form method="POST" action="?/deleteaccount">
 	<button>DELETE ACCOUNT</button>
 </form>
+
+<form method="POST" action="?/deletehistory">
+	<button>DELETE HISTORY</button>
+</form>

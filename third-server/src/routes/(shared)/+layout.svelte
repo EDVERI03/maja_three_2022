@@ -7,13 +7,14 @@
     {#if data?.userid}
         <a href="/">Home</a>
         <a href="/settings">Settings</a>
+        <a href="/posts">Posts</a>
+        <a href="/history">History</a>
     {:else}
         <a href="/login">Login</a>
         <a href="/register">Register</a>
     {/if}
 
     <a href="/info">Info</a>
-    <a href="/support">Support</a>
 </nav>
 
 <slot />

@@ -8,10 +8,13 @@
 
     <a href="/settings">Settings</a>
 
+    <a href="/posts">Posts</a>
+    
+    <a href="/history">History</a>
+
     <a href="/info">Info</a>
 
-    <a href="/support">Support</a>
 </nav>
-<p>{data?.userid}</p>
+<p>{data?.displayname}</p>
 
 <slot />

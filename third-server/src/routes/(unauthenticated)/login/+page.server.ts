@@ -2,6 +2,7 @@ import { invalid, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import * as database from '$lib/database'
 import type Page from './+page.svelte';
+import * as crypto from "crypto"
 
 const data=new Map<string,number>()
 
@@ -23,25 +24,28 @@ export const actions: Actions = {
     	const db = client.db("test"); 
     	const collection = db.collection("users");
 
+		
 		if ((await collection.distinct("username")).includes(form.get("username"))) {
 			const USER = await collection.findOne({"username":form.get("username")})
-			console.log(USER)
-			if (USER && USER["password"] == form.get("password")){
-				cookies.set('userid', USER["username"], {
+			
+			const salt = USER?.salt.toString()
+			const hash = crypto.pbkdf2Sync(form.get("password")?.toString()??"", salt, 1000, 64, 'sha512').toString('hex')
+
+			if (USER && USER.hash == hash){
+				const sessionid = crypto.randomUUID()
+				cookies.set('userid', sessionid, {
 					path: '/',
+
 					httpOnly: true, // optional for now
 					sameSite: 'strict',// optional for now
-					secure: process.env.NODE_ENV === 'production',// optional for now
-					maxAge: 120 //
+					secure: process.env.NODE_ENV === 'production', // optional for now
+					maxAge: 12000 //
 				})
+				collection.updateOne({username: USER.username}, {$set: {sessionid}})
 		
 			} else return invalid(400, { message: "Wrong password" })
 			
 		 } else return invalid(400, { message: "User does not exist" })
-
-		if (form.get('username') == "william") {
-			return invalid(400, { message: "username invalid" })
-		}
 
 		
 		throw redirect(302, '/')
