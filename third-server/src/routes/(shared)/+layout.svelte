@@ -3,7 +3,7 @@
     export let data: LayoutServerData;
 </script>
 
-<nav>
+<nav class="navbar">
     {#if data?.userid}
         <a href="/">Home</a>
         <a href="/settings">Settings</a>

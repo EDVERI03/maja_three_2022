@@ -4,8 +4,10 @@
     export let data:PageServerData;
 
     function findTitle (postid: string) {
-        console.log((data?.posts?.find(o=> o.id == postid))?.title)
-        return (data?.posts?.find(o=> o.id == postid))?.title
+        const post = data?.posts?.find(o=> o.id == postid)
+
+        //return (data?.posts?.find(o=> o.id == postid))?.title
+        return `${post!.title} - ${post!.author}`
     }
 
 </script>
