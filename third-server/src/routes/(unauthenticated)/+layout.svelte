@@ -1,8 +1,6 @@
 <nav class="navbar">
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
-    <a href="/info">Info</a>
-    <a href="/support">Support</a>
+    <a href="/login" class="navlink">Login</a>
+    <a href="/register" class="navlink">Register</a>
 </nav>
 
 <slot />

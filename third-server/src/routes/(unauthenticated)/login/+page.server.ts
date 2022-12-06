@@ -1,8 +1,9 @@
 import { invalid, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import * as database from '$lib/database'
+import { database } from '$lib/database'
 import type Page from './+page.svelte';
 import * as crypto from "crypto"
+import { Collection } from 'mongodb';
 
 const data=new Map<string,number>()
 
@@ -16,19 +17,18 @@ export const actions: Actions = {
 		const form = await request.formData();
 		data.set(locals.userid,(data.get(locals.tempid)??0) + 1)
 
+		const username = form.get("username")?.toString()
+
 		// TODO: Implement login
 		// Check if password and username
 		// exists and is correct 
 
-		const client = await database.connect();
-    	const db = client.db("test"); 
-    	const collection = db.collection("users");
 
 		
-		if ((await collection.distinct("username")).includes(form.get("username"))) {
-			const USER = await collection.findOne({"username":form.get("username")})
+		if ((await database.user.findFirst({where: {username: username}}))) {
+			const USER = await database.user.findFirst({where: {username: username}})
 			
-			const salt = USER?.salt.toString()
+			const salt = USER?.salt||""
 			const hash = crypto.pbkdf2Sync(form.get("password")?.toString()??"", salt, 1000, 64, 'sha512').toString('hex')
 
 			if (USER && USER.hash == hash){
@@ -41,7 +41,8 @@ export const actions: Actions = {
 					secure: process.env.NODE_ENV === 'production', // optional for now
 					maxAge: 12000 //
 				})
-				collection.updateOne({username: USER.username}, {$set: {sessionid}})
+				//collection.updateOne({username: USER.username}, {$set: {sessionid}})
+				await database.user.update({where:{username: username},data:{session: sessionid}})
 		
 			} else return invalid(400, { message: "Wrong password" })
 			

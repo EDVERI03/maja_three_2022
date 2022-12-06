@@ -7,5 +7,6 @@ export const load: LayoutServerLoad = async ({ locals, cookies }) => {
     if (locals.userid) {
         throw redirect(302, '/')
     }
+    
 
 }

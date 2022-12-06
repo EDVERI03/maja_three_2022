@@ -1,45 +1,50 @@
 import type { Actions, PageServerLoad } from "./$types";
 import { invalid } from "@sveltejs/kit";
-import * as database from "$lib/database"
+import { database } from "$lib/database"
+import { append } from "svelte/internal";
 
-export const load: PageServerLoad = async ({params, locals})=>{
+export const load: PageServerLoad = async ({ params, locals }) => {
     //Here i can do stuff
-
-    
-    const client = await database.connect();
-    const db = client.db("test"); 
-    const users = db.collection("users");
-    const posts = db.collection("posts")
-    const user = await users.findOne({sessionid:locals.userid})
-
+    const post = await database.post.findUnique({ where: { id: params.slug }, include: {replies: {include: {author: {select: {username: true, profileimage: true, profileURL: true}}}}} })
+    const user = await database.user.findUnique({ where: { id: post?.authorId }})
     //let post = posts.find((e)=>e.id==params.slug)
-    
-    let post = (await posts.findOne({_id:params.slug}))
 
-
-    
-
-    if (user?.username && post?._id) {
-        await users.updateOne({username:user.username}, {$set: {"lastVisited":[post._id].concat(user?.lastVisited)}})
+    if (user?.username && post?.id) {
+        //Ad post to account history (does not exist right now)
     }
 
-    return {post};
-    
+    return { post, user}
+
+
 }
 
-export const actions:Actions = {
-    comment: async ({request, params}) => {
-        const client = await database.connect();
-        const db = client.db("test"); 
-        const collection = db.collection("posts");
+export const actions: Actions = {
+    comment: async ({ request, params, locals }) => {
 
-        const POST = (await collection.findOne({_id:params.slug}))
+
+        const post = (await database.post.findUnique({ where: { id: params.slug } }))
+        const user = (await database.user.findUnique({ where: { session: locals.userid } }))
         const form = await request.formData()
-        
         if (form.get("comment") != null) {
-            collection.updateOne({_id: params.slug}, {$set: {replies: [form.get("comment")].concat(POST?.replies??[])}})
+            //collection.updateOne({_id: params.slug}, {$set: {replies: [form.get("comment")].concat(POST?.replies??[])}})
             //POST?.replies.push((form.get("comment")?.toString() || ""))
-        } else return invalid(400, {messages: "Reply invalid"});
+            try{
+                await database.post.update({ where: { id: post?.id }, data: { replies: { create: { content: form.get("comment")?.toString(), authorId: user?.id! } } } })
+            } catch (e) {
+                return invalid(400, { error: "message creation error" });
+            }
+        } else return invalid(400, { messages: "reply invalid" });
         return;
+    },//beans
+
+    rate: async ({request, params}) => {
+        const form = await request.formData()
+        const value = Number(form.get("score")?.toString())
+        if(value) {
+            await database.post.update({where: {id: params.slug}, data: {rating: {increment: value}}})
+        } else return invalid(400, {messages: "failed to complete task"})
+
+        return;
+        
     }
 }

@@ -1,0 +1,45 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  id    Int     @id @default(autoincrement())
+  username String  @unique
+  profileimage String @default("https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png?20150327203541")
+  profileURL String @unique @default(uuid())
+  profilebio String?
+  salt  String @unique
+  hash String @unique
+  session String @unique
+  posts post[]
+  replies comment[]
+}
+
+model post {
+  id        String     @id @default(uuid())
+  title     String
+  content   String?
+  private Boolean @default(false)
+  author   user @relation(fields: [authorId], references: [id])
+  authorId Int 
+  replies comment[]
+  rating Int 
+}
+
+model comment {
+  id     Int     @id @default(autoincrement())
+  content String?
+  post   post @relation(fields: [postId], references: [id])
+  postId String
+  author   user @relation(fields: [authorId], references: [id])
+  authorId Int 
+}
+
