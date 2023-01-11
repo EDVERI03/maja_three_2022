@@ -9,12 +9,19 @@ import type { ActionData, PageServerData } from "./$types";
     <br>
     <img src="{data.img}" alt="{data.name}" class="profileimglarge">
     <h1>{data.name}</h1>
-    <br>
     {#if data.bio}
+    <br>
     <div class="box">
         <p>{data?.bio}</p>
             
     </div>
+    <br>
+    {/if}
+    {#if !(data.own)}
+    <form action="?/directmessage" method="POST">
+        <input type="hidden" name="id" value="{data.id}">
+        <button type="submit" class="button">Message</button>
+    </form>
     {/if}
     <br>
     {#if data.posts[0]}

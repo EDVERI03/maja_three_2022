@@ -19,8 +19,11 @@ model user {
   salt  String @unique
   hash String @unique
   session String @unique
-  posts post[]
+  posts post[] @relation(name:"userposts")
+  visited post[]
   replies comment[]
+  messages message[]
+  messagememberships messagegroup[]
 }
 
 model post {
@@ -28,8 +31,9 @@ model post {
   title     String
   content   String?
   private Boolean @default(false)
-  author   user @relation(fields: [authorId], references: [id])
+  author   user @relation(fields: [authorId], references: [id], name: "userposts", onDelete: Cascade)
   authorId Int 
+  visitors user[]
   replies comment[]
   rating Int 
 }
@@ -37,9 +41,26 @@ model post {
 model comment {
   id     Int     @id @default(autoincrement())
   content String?
-  post   post @relation(fields: [postId], references: [id])
+  post   post @relation(fields: [postId], references: [id], onDelete: Cascade)
   postId String
-  author   user @relation(fields: [authorId], references: [id])
+  author   user @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId Int 
 }
 
+model messagegroup {
+  id     String     @id @default(uuid())
+  messages message[] 
+  members user[] 
+}
+
+model message {
+  id        Int @id @default(autoincrement())
+  group     messagegroup @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId   String
+  author    user @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  Int
+
+  content   String
+  time      DateTime @default(now())
+  own Boolean? 
+}

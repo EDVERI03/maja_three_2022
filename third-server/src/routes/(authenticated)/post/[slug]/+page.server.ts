@@ -2,15 +2,17 @@ import type { Actions, PageServerLoad } from "./$types";
 import { invalid } from "@sveltejs/kit";
 import { database } from "$lib/database"
 import { append } from "svelte/internal";
+import { connect } from "http2";
 
 export const load: PageServerLoad = async ({ params, locals }) => {
     //Here i can do stuff
     const post = await database.post.findUnique({ where: { id: params.slug }, include: {replies: {include: {author: {select: {username: true, profileimage: true, profileURL: true}}}}} })
     const user = await database.user.findUnique({ where: { id: post?.authorId }})
+    
     //let post = posts.find((e)=>e.id==params.slug)
 
-    if (user?.username && post?.id) {
-        //Ad post to account history (does not exist right now)
+    if (locals.userid && post?.id) {
+        await database.post.update({where: {id: post.id}, data: {visitors: {connect: {session: locals.userid}}}})
     }
 
     return { post, user}

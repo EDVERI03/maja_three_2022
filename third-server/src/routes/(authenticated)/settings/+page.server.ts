@@ -1,6 +1,7 @@
 import { invalid, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import * as database from '$lib/database';
+import {database} from '$lib/database';
+import { disconnect } from 'process';
 const data=new Map<string,number>()
 
 export const load: PageServerLoad = ({locals})=>{
@@ -9,11 +10,6 @@ export const load: PageServerLoad = ({locals})=>{
 }
 
 export const actions: Actions = {
-	click: async ({ request, locals, cookies }) => {
-		
-		data.set(locals.userid,(data.get(locals.userid)??0) + 1)
-
-	},
 	logout: async ({ request, locals, cookies }) => {
 		const form = await request.formData();
 
@@ -23,34 +19,12 @@ export const actions: Actions = {
 		throw redirect(302, '/login')
 
 	},
-	deleteaccount: async ({ request, locals, cookies }) => {
-		const form = await request.formData();
-
-		// TODO: Implement delete account
-		// Check if ustername already exist etc.
-
-		const client = await database.connect();
-    	const db = client.db("test"); 
-    	const collection = db.collection("users"); 
-
-		if((await collection.distinct("username")).includes(cookies.get("userid"))) {
-			const result = await collection.deleteOne({"username":cookies.get("userid")})
-			if (!result.acknowledged || result.deletedCount!=1) {
-				cookies.delete('userid')
-			} else return invalid(400, {message:"Account could not be deleted"})
-		} else return invalid(400, {message:"Obama does not exist"})
-
-		
-		throw redirect(302, '/register')
-
+	deleteaccount: async ({ locals, cookies }) => {
+		await database.user.delete({where: {session: locals.userid}})
+		cookies.delete('userid')
+		throw redirect(302, '/login')
 	},
 	deletehistory: async ({locals}) => {
-
-		const client = await database.connect();
-		const db = client.db("test")
-		const collection = db.collection("users")
-
-		collection.updateOne({sessionid: locals.userid}, {$set: {lastVisited: []}})
-
+		await database.user.update({where: {session: locals.userid}, data: {visited: {set: []}}})
 	}
 };

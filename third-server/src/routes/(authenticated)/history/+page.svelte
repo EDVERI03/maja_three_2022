@@ -2,24 +2,27 @@
     import type { PageServerData } from "./$types";
 
     export let data:PageServerData;
-
-    function findTitle (postid: string) {
-        const post = data?.posts?.find(o=> o.id == postid)
-
-        //return (data?.posts?.find(o=> o.id == postid))?.title
-        return `${post!.title} - ${post!.author}`
-    }
-
 </script>
 
-<h1>History</h1>
-
-{#each data.history as postid}
-    {#if (data.posts && data.posts.some(o=> o.id == postid))}
-    <a href={"post/"+postid}>{findTitle(postid)}</a>
-    <br>
+<div class="fill"> 
+    <h1>History</h1>
+    {#if data.visited[0]}
+    <div class="box flex-column" >
+        <div class="flex-scroll">
+            {#each data.visited as post}
+            <a href="/post/{post.id}" style="scroll-snap-align: center;">
+                <div class="transbox flex-column">
+                    <div class="window">
+                        <img src="{post.content}" alt="post: {post.title}" class="previewimg">
+                    </div>
+                    <p>{post.title} | {post.rating}</p>
+                </div>
+            </a>
+            {/each}
+            
+        </div>
+    </div>
     {:else}
-    <a href={"post/"+postid}>[DELETED]</a>
-    <br>
+    <p>It's empty here...</p>
     {/if}
-{/each}
+</div>

@@ -3,10 +3,19 @@
 import type { PageServerData } from "./$types";
 
     export let data: PageServerData;
-    console.log(data)
 
     const timesortposts = Array.from(data.posts).reverse()
     const ratesortposts = Array.from(data.posts).sort((a, b) => b.rating - a.rating)
+    shuffleArray(data.posts)
+
+    function shuffleArray(array: any[]) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+}
     
 
 </script>
@@ -19,7 +28,7 @@ import type { PageServerData } from "./$types";
     </div>
     <hr>
     <div class="box flex-column">
-        <h1>Posts:</h1>
+        <h1>Recommended Posts:</h1>
         <div class="flex-scroll">
             {#each data.posts as post}
                 <a href="/post/{post.id}" style="scroll-snap-align: center;">
@@ -27,7 +36,7 @@ import type { PageServerData } from "./$types";
                         <div class="window">
                             <img src="{post.content}" alt="{post.title}" class="previewimg">
                         </div>
-                        <p>{post.title} | {post.rating}</p>
+                        <p>{post.title.substring(0, 20)} | {post.rating}</p>
                     </div>
                 </a>
             {/each}
@@ -43,7 +52,7 @@ import type { PageServerData } from "./$types";
                         <div class="window">
                             <img src="{post.content}" alt="{post.title}" class="previewimg">
                         </div>
-                        <p>{post.title} | {post.rating}</p>
+                        <p>{post.title.substring(0, 20)} | {post.rating}</p>
                     </div>
                 </a>
             {/each}
@@ -59,7 +68,7 @@ import type { PageServerData } from "./$types";
                         <div class="window">
                             <img src="{post.content}" alt="{post.title}" class="previewimg">
                         </div>
-                        <p>{post.title} | {post.rating}</p>
+                        <p>{post.title.substring(0, 20)} | {post.rating}</p>
                     </div>
                 </a>
             {/each}
