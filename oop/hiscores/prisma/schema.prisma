@@ -1,0 +1,36 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Leaderboard {
+  id String @id
+  saveMultipleScoresPerPlayer Boolean @default(true)
+  scores Score[]
+}
+model Score {
+  id Int @id @default(autoincrement())
+
+  leaderboard Leaderboard @relation(fields: [leaderboardId], references: [id], onDelete: Cascade)
+  leaderboardId String
+
+  value Int
+  date DateTime @default(now())
+  player Player @relation(fields: [playerId], references: [id], onDelete: Cascade)
+  playerId String
+
+}
+
+model Player {
+  id String @id
+  powerLevel Int
+
+  scores Score[]
+}
