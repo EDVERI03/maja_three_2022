@@ -29,7 +29,7 @@ export const actions: Actions = {
                 replies:[]}) */
                 await database.user.update({ where: { username: user.username }, data: { posts: { create: { title: form.get("title")?.toString() || "Obama Backflip", content: form.get("image")?.toString() || "", rating: 0} } } })
 
-            } else return invalid(400, { message: "Invalid Post" })
-        } else return invalid(400, { message: "user not logged in" })
+            } else return error(400, { message: "Invalid Post" })
+        } else return error(400, { message: "user not logged in" })
     }
 }

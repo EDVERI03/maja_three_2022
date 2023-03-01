@@ -1,4 +1,4 @@
-import { invalid, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import {database} from '$lib/database';
 import { disconnect } from 'process';

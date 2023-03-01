@@ -1,4 +1,4 @@
-import { invalid, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { Actions } from './$types';
 import {database} from '$lib/database'
 import * as crypto from 'crypto'
@@ -27,8 +27,8 @@ export const actions: Actions = {
 				},})
 				
 				//collection.insertOne({"username": form.get("username"), "hash": hash, "salt": salt});
-			} else return invalid(400, { message: "Username Taken" })
-		} else return invalid(400, { message: "invalid Credentials" })
+			} else return error(400, { message: "Username Taken" })
+		} else return error(400, { message: "invalid Credentials" })
 
 		throw redirect(302, "/login")
 

@@ -10,7 +10,7 @@
 		"sourceMap": true,
 		"strict": true,
     	"outDir": "dist",
-    	"lib": ["esnext"],
+    	"lib": ["esnext","dom"],
 		
 	}
 	// Path aliases are handled by https://kit.svelte.dev/docs/configuration#alias

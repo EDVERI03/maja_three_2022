@@ -33,9 +33,9 @@ export const actions: Actions = {
             try{
                 await database.post.update({ where: { id: post?.id }, data: { replies: { create: { content: form.get("comment")?.toString(), authorId: user?.id! } } } })
             } catch (e) {
-                return invalid(400, { error: "message creation error" });
+                return error(400, { error: "message creation error" });
             }
-        } else return invalid(400, { messages: "reply invalid" });
+        } else return error(400, { messages: "reply invalid" });
         return;
     },//beans
 
@@ -44,7 +44,7 @@ export const actions: Actions = {
         const value = Number(form.get("score")?.toString())
         if(value) {
             await database.post.update({where: {id: params.slug}, data: {rating: {increment: value}}})
-        } else return invalid(400, {messages: "failed to complete task"})
+        } else return error(400, {messages: "failed to complete task"})
 
         return;
         
