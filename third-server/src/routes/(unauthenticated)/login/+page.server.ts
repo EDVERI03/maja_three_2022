@@ -1,19 +1,18 @@
-import { invalid, redirect } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
 import { database } from '$lib/database'
-import type Page from './+page.svelte';
 import * as crypto from "crypto"
-import { Collection } from 'mongodb';
 
 const data=new Map<string,number>()
 
 export const load: PageServerLoad = ({locals})=>{
-	return {tries: data.get(locals.tempid)??0}
-
+	return {tries: data.get(locals.tempid)??0}	
 }
 
 export const actions: Actions = {
 	login: async ({ request, locals, cookies }) => {
+		
+		/* 
 		const form = await request.formData();
 		data.set(locals.userid,(data.get(locals.tempid)??0) + 1)
 
@@ -22,9 +21,7 @@ export const actions: Actions = {
 		// TODO: Implement login
 		// Check if password and username
 		// exists and is correct 
-
-
-		
+ 
 		if ((await database.user.findFirst({where: {username: username}}))) {
 			const USER = await database.user.findFirst({where: {username: username}})
 			
@@ -44,12 +41,12 @@ export const actions: Actions = {
 				//collection.updateOne({username: USER.username}, {$set: {sessionid}})
 				await database.user.update({where:{username: username},data:{session: sessionid}})
 		
-			} else return invalid(400, { message: "Wrong password" })
+			} else return error(400, { message: "Wrong password" })
 			
-		 } else return invalid(400, { message: "User does not exist" })
+		 } else return error(400, { message: "User does not exist" })
 
 		
 		throw redirect(302, '/')
-
+ */
 	},
 };
