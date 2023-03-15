@@ -10,7 +10,7 @@ let sorters = [
 for (const sorter of sorters) {
   // create a shuffled array of a million items
   let array = sorter.shuffle(
-    Array(1000000)
+    Array(10)
       .fill(null)
       .map((_, i) => i)
   );
@@ -18,7 +18,7 @@ for (const sorter of sorters) {
     let result = sorter.timed_sort(array);
     console.log(
       result.milliseconds +
-        " milliseconds to sort the 1.000.000 length array using sorter " +
+        ` milliseconds to sort the ${array.length} length array using sorter ` +
         sorter.constructor.name
     );
   } catch (e) {
