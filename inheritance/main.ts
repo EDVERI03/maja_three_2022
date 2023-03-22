@@ -10,7 +10,7 @@ let sorters = [
 for (const sorter of sorters) {
   // create a shuffled array of a million items
   let array = sorter.shuffle(
-    Array(10)
+    Array(50)
       .fill(null)
       .map((_, i) => i)
   );

@@ -1,8 +1,8 @@
 import { error } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 import { database } from "$lib/database";
+import { _streams } from "$lib/interfaces/chat";
 
-export const streams: Record<string, {controller: ReadableStreamDefaultController<string>, dm: string}> = {}
 
 export const GET: RequestHandler = async ({ locals, params }) => {
   
@@ -10,11 +10,11 @@ export const GET: RequestHandler = async ({ locals, params }) => {
       start(controller) {
         /* save the controller for the stream so that we can */
         /* enqueue messages into the stream */
-        streams[locals.userid!] = { controller, dm: params.slug };
+        _streams[locals.userid!] = { controller, dm: params.slug };
       },
       cancel() {
         /* remove the stream */
-        delete streams[locals.userid!];
+        delete _streams[locals.userid!];
       },
     });
   
