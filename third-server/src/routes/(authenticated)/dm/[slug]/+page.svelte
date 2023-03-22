@@ -71,7 +71,7 @@
       {/if}
     </div>
 
-    <form action="?/message" method="POST" class="chatbar">
+    <form action="?/message" method="POST" class="chatbar" use:enhance>
         <input type="text" name="message" placeholder="message" >
     </form>
 </div>

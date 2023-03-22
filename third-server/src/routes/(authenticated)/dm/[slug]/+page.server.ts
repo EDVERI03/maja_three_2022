@@ -14,6 +14,6 @@ export const load: PageServerLoad = async ({params, locals}) => {
 export const actions: Actions = {
     message: async ({request, params, locals}) => {
         const form = await request.formData() 
-        chater.Message(form, params.slug, locals.userid)
+        await chater.Message(form, params.slug, locals.userid)
     }
 }
