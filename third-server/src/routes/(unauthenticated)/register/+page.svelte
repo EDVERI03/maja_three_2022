@@ -15,8 +15,8 @@
 			<input type="text" name="username" placeholder="username" class="textfield"/>
 			<input type="password" name="password" placeholder="password" class="textfield"/>
 			<button class="button">REGISTER</button>
-			{#if form?.message}
-				<p>{form?.message}</p>
+			{#if form?.body}
+				<p>{form?.body}</p>
 			{/if}
 		</form>
 
