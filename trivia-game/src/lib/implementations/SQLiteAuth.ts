@@ -8,15 +8,22 @@ export class SQLiteAuth implements Auth {
         const email = form.get("email")!.toString()
         const password = form.get("password")!.toString()
 
-        const user = await database.user.findUniqueOrThrow({where: {email}})
-        const comphash = crypto.pbkdf2Sync(password.toString()??"", user.salt, 1000, 64, 'sha512').toString('hex')
+        try {
+            const user = await database.user.findUniqueOrThrow({where: {email}})
+            const comphash = crypto.pbkdf2Sync(password.toString()??"", user.salt, 1000, 64, 'sha512').toString('hex')
+    
+            if (comphash == user.hash) {
+                const session = crypto.randomUUID()
+                await database.user.update({where: {email}, data:{session}})
+                return {success: {session}}
+            }
 
-        if (comphash == user.hash) {
-            await database.user.update({where: {email}, data:{session: crypto.randomUUID()}})
-            return {success: {session: user.session}}
+        } catch {
+            return {error: {code: 302, data: "User not found"}}
+
         }
 
-        return {error: {code: 302, data: "unimplemented function"}}
+        return {error: {code: 302, data: "User not found"}}
     }
 
     async register(form: FormData): Promise<LoginResult> {
@@ -32,12 +39,12 @@ export class SQLiteAuth implements Auth {
             if (!(await database.user.findUnique({where: {email}}))) {
                 const salt = crypto.randomBytes(16).toString('hex');
                 const hash = crypto.pbkdf2Sync(password.toString()??"", salt, 1000, 64, 'sha512').toString('hex')
-
+                const session = crypto.randomUUID()
                 const user = await database.user.create({data: {
-                    username, salt, hash, email, session: crypto.randomUUID()
+                    username, salt, hash, email, session
 				},})
 
-                return {success: {session: user.session}}
+                return {success: {session}}
 
             } else {
                 return {error: {code: 400, data: "User Already Registered for this Email Address."}}

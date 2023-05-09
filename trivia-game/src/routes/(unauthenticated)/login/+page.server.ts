@@ -9,7 +9,7 @@ export const actions: Actions = {
         const auth = new SQLiteAuth
 
         const result = await auth.login(form)
-
+        
         if (result.success) {
             cookies.set('sessionId', result.success.session, {
 				path: '/',

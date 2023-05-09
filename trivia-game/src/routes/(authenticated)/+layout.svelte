@@ -1,3 +1,9 @@
+<script lang="ts">
+    import type { LayoutServerData } from "./$types";
+
+    export let data: LayoutServerData
+</script>
+
 <nav class="navbar">
     <div>
         <a href="/">
@@ -8,9 +14,22 @@
             <button class="navbutton ">PROFILE</button>
         </a>
         <span class="vbreak"/>
-        <a href="/settings">
-            <button class="navbutton nbright">SETTINGS</button>
-        </a>
+        {#if data.isAdmin}
+            <a href="/settings">
+                <button class="navbutton">SETTINGS</button>
+            </a>
+
+            <span class="vbreak"></span>
+
+            <a href="/create-quiz">
+                <button class="navbutton nbright adminbutton">CREATE QUIZ</button>    
+            </a>
+        {:else}
+            <a href="/settings">
+                <button class="navbutton nbright">SETTINGS</button>
+            </a>
+        {/if}
+
     </div>
     <a class="gitbutton" href="https://github.com/EDVERI03/maja_three_2022"> 
         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24">
