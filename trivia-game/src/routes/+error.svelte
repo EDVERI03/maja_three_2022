@@ -2,6 +2,6 @@
     import { page } from '$app/stores';
 </script>
 
-<div class="errorbox">
+<div class="horizontalbox">
     <h1>ERROR: {$page.error?.message}</h1>
 </div>

@@ -18,7 +18,7 @@ body {
 	background: linear-gradient(-45deg, var(--SIGNAL-ORANGE), var(--VAPOR-PEACH), var(--SKY-BLUE), var(--VAPOR-CYAN));
 	background-size: 400% 400%;
 	animation: gradient 10s ease infinite;
-	height: 100vh;
+	min-height: 100vh;
     margin: 0;
 }
 
@@ -37,7 +37,7 @@ body {
 .mainbox {
     background-color: var(--PURE-BLACK);
     min-width: 100%;
-    min-height: calc(100% - 23em - 21px);
+    min-height: calc(100vh - 23em - 21px);
     height: auto;
     display: flex;
     align-items: center;
@@ -138,10 +138,12 @@ body {
     justify-content: center;
     position: absolute;
     right: 10px;
+
+    transition: all 1s;
   }
 
   .gitbutton:hover {
-    background-color: var(--GRAY-ACCENT);
+    animation: heat 1s ease infinite;
   }
 
   .gitbutton path {
@@ -149,13 +151,15 @@ body {
     fill: var(--PURE-WHITE);
   }
 
-  .errorbox {
+  .horizontalbox {
     background-color: var(--PURE-BLACK);
     width: 70%;
-    height: 100%;
+    height: 100vh;
     margin: auto;
     margin-top: 0;
     display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .formbox {
@@ -322,12 +326,17 @@ body {
     height: 3em;
     margin: 10px;
     color: var(--PURE-WHITE);
-    background-color: var(--PURE-BLACK);
+    background-color: transparent;
     outline-style: solid;
     outline-width: 2px;
     outline-offset: 2px;
     outline-color: var(--DARK-GRAY);
     transition: all 0.3s;
+  }
+
+  a .buttonbox {
+    width: inherit;
+    max-width: inherit;
   }
 
   .errortext {
@@ -350,6 +359,14 @@ body {
     background-color: var(--DARK-GRAY);
     flex-direction: column;
     padding: 20px;
+  }
+
+  .buttonholderbox {
+    width: 40em;
+    max-width: calc(100% - 20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
 .spacerbox {
@@ -413,6 +430,8 @@ body {
   outline-color: var(--DARK-GRAY);
 
   transition: all 0.3s;
+
+  overflow: hidden;
 }
 
 .roundbutton span {
@@ -437,4 +456,56 @@ body {
 
 .roundbutton:active span {
   color: var(--PURE-WHITE);
+}
+
+.heatbar {
+  width: 30em;
+  max-width: calc(100vh - 60px);
+  height: 1em;
+
+  border-radius: 3em;
+  overflow: hidden;
+
+  margin: 10px;
+
+  outline-offset: 2px;
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: var(--DARK-GRAY);
+}
+
+.heatbar div {
+  transition: all 0.3s;
+
+  background-color: var(--DARK-GRAY);
+
+  animation: heat 7s infinite;
+
+  height: inherit;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+@keyframes heat {
+  0%   {background-color: var(--VAPOR-CYAN);}
+  25%  {background-color: var(--SKY-BLUE);}
+  50%  {background-color: var(--VAPOR-PEACH);}
+  75% {background-color: var(--SIGNAL-ORANGE);}
+  100%   {background-color: var(--VAPOR-CYAN);}
+}
+
+@media screen and (orientation: portrait) {
+  .transparentbox {
+    height: 5em;
+  }
+  .mainbox {
+    min-height: calc(100vh - 18em - 21px);
+  }
+  .horizontalbox {
+    width: 100%;
+  }
 }

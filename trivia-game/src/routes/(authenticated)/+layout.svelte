@@ -22,7 +22,7 @@
             <span class="vbreak"></span>
 
             <a href="/create-quiz">
-                <button class="navbutton nbright adminbutton">CREATE QUIZ</button>    
+                <button class="navbutton nbright adminbutton">EDIT QUIZ</button>    
             </a>
         {:else}
             <a href="/settings">

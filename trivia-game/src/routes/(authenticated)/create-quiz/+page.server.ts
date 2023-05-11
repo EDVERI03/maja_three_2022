@@ -1,6 +1,7 @@
 import { database } from "$lib/database"
 import { redirect, type Actions } from "@sveltejs/kit"
 import type { PageServerLoad } from "./$types"
+import { SQLiteAdmin } from "$lib/implementations/SQLiteAdmin"
 
 export const load: PageServerLoad = async ({ locals }) => {
     
@@ -16,9 +17,10 @@ export const actions:Actions = {
     createNewCategory: async ({request, locals}) => {
         const form = await request.formData()
         if (form.get("prefixes") != undefined) {
-            const prefixes: String[] = form.get("prefixes")!.toString().split(",")
-            console.log(form)
-            console.log(prefixes)
+            const admin = new SQLiteAdmin()
+            if (await admin.CreateQuiz(form)) {
+                throw redirect(302, "/")
+            }
         }
     }
 }

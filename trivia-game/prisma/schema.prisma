@@ -23,12 +23,12 @@ model user {
 
 model Category {
   id Int @id @default(autoincrement())
-  name String
+  name String @unique
   questions Question[]
 }
 model Question {
   id Int @id @default(autoincrement())
-  category Category @relation(fields: [categoryId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   categoryId Int 
   title String 
   answers Answer[]
@@ -36,8 +36,8 @@ model Question {
 
 model Answer {
   id Int @id @default(autoincrement())
-  question Question @relation(fields: [questionId], references: [id])
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
   questionId Int
-  title String
+  title String 
   correct Boolean
 }
