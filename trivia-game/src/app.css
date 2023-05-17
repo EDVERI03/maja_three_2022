@@ -34,6 +34,15 @@ body {
 	}
 }
 
+@keyframes heat {
+  0%   {background-color: var(--VAPOR-CYAN);}
+  25%  {background-color: var(--SKY-BLUE);}
+  50%  {background-color: var(--VAPOR-PEACH);}
+  75% {background-color: var(--SIGNAL-ORANGE);}
+  100%   {background-color: var(--VAPOR-CYAN);}
+}
+
+
 .mainbox {
     background-color: var(--PURE-BLACK);
     min-width: 100%;
@@ -154,7 +163,7 @@ body {
   .horizontalbox {
     background-color: var(--PURE-BLACK);
     width: 70%;
-    height: 100vh;
+    height: calc(100vh - 3em - 21px);
     margin: auto;
     margin-top: 0;
     display: flex;
@@ -479,7 +488,7 @@ body {
 
   background-color: var(--DARK-GRAY);
 
-  animation: heat 7s infinite;
+  animation: heat 10s infinite;
 
   height: inherit;
 }
@@ -488,14 +497,6 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-}
-
-@keyframes heat {
-  0%   {background-color: var(--VAPOR-CYAN);}
-  25%  {background-color: var(--SKY-BLUE);}
-  50%  {background-color: var(--VAPOR-PEACH);}
-  75% {background-color: var(--SIGNAL-ORANGE);}
-  100%   {background-color: var(--VAPOR-CYAN);}
 }
 
 @media screen and (orientation: portrait) {
