@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Heebo&family=Mukta:wght@300&family=Poppins&display=swap');
+
 :root {
-	font-family: 'Poppins', Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
+	font-family: 'Mukta','Poppins', Arial, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu,
 		Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     color: var(--PURE-WHITE);
 	--font-mono: 'Fira Mono', monospace;
@@ -40,6 +42,13 @@ body {
   50%  {background-color: var(--VAPOR-PEACH);}
   75% {background-color: var(--SIGNAL-ORANGE);}
   100%   {background-color: var(--VAPOR-CYAN);}
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
 }
 
 
@@ -224,26 +233,34 @@ body {
     background-color: var(--GRAY-ACCENT);
   }
 
-  .peach-text:focus,.peach-text:hover {
-    color: var(--VAPOR-PEACH);
+  input:-webkit-autofill{
+    -webkit-text-fill-color: var(--PURE-WHITE) !important;
+}
+
+  .peach-text:focus,.peach-text:hover,.peach-text:focus:-webkit-autofill,.peach-text:hover:-webkit-autofill {
+    color: var(--VAPOR-PEACH) ;
+    -webkit-text-fill-color: var(--VAPOR-PEACH) !important;
     outline-color: var(--VAPOR-PEACH);
     accent-color: var(--VAPOR-PEACH);
   }
 
-  .cyan-text:focus,.cyan-text:hover {
-    color: var(--VAPOR-CYAN);
+  .cyan-text:focus,.cyan-text:hover,.cyan-text:focus:-webkit-autofill,.cyan-text:hover:-webkit-autofill {
+    color: var(--VAPOR-CYAN) ;
+    -webkit-text-fill-color: var(--VAPOR-CYAN) !important;
     outline-color: var(--VAPOR-CYAN);
     accent-color: var(--VAPOR-CYAN);
   }
 
-  .signal-text:focus,.signal-text:hover {
+  .signal-text:focus,.signal-text:hover,.signal-text:focus:-webkit-autofill,.signal-text:hover:-webkit-autofill {
     color: var(--SIGNAL-ORANGE);
+    -webkit-text-fill-color: var(--SIGNAL-ORANGE) !important;
     outline-color: var(--SIGNAL-ORANGE);
     accent-color: var(--SIGNAL-ORANGE);
   }
 
-  .sky-text:focus,.sky-text:hover {
-    color: var(--SKY-BLUE);
+  .sky-text:focus,.sky-text:hover,.sky-text:focus:-webkit-autofill,.sky-text:hover:-webkit-autofill {
+    color: var(--SKY-BLUE) ;
+    -webkit-text-fill-color: var(--SKY-BLUE) !important;
     outline-color: var(--SKY-BLUE);
     accent-color: var(--SKY-BLUE);
   }
@@ -497,6 +514,10 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
+}
+
+orange {
+  color: var(--SIGNAL-ORANGE);
 }
 
 @media screen and (orientation: portrait) {

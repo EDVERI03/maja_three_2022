@@ -1,33 +1,125 @@
-<script>
-    import { enhance } from "$app/forms";
+<script lang="ts">
+    import { enhance, applyAction } from "$app/forms";
+    import type { ActionResult } from "@sveltejs/kit";
+    import type { ActionData, PageServerData } from "./$types";
 
-    let question = "QUESTION"
-    let defaultHeatTime = 70
-    let heatTimer = 0
-    let heat = 0
+    let current = 0;
+    let category = "CATEGORY";
+    let question = "QUESTION";
+    let answer1 = "ANSWER";
+    let answer2 = "ANSWER";
+    let answer3 = "ANSWER";
+    let correct = 99;
+    let defaultHeatTime = 70;
+    let heatTimer = 0;
+    let heat = 0;
+    let score = 0;
 
     setInterval(() => {
-    if (heatTimer > 0) heatTimer--;
-    if (heatTimer <= 0 && heat > 0) heat = 0;
-  }, 100);
+        if (heatTimer > 0) heatTimer--;
+        if (heatTimer <= 0 && heat > 0) heat = 0;
+    }, 100);
 
+    export let data: PageServerData;
+    export let form: ActionData;
+
+    Reload();
+
+    function Reload() {
+        category = data.questions.success[current].category;
+        question = data.questions.success[current].title;
+        answer1 = data.questions.success[current].answer1;
+        answer2 = data.questions.success[current].answer2;
+        answer3 = data.questions.success[current].answer3;
+        correct = data.questions.success[current].correct;
+    }
+
+    function Continue() {
+        if (current < data.questions.success.length-1) {
+            console.log(data.questions.success.length)
+            current++; 
+        } else {
+            console.log("beep boop, doing the other thing")
+            
+        }
+        Reload();
+        console.log("did shit");
+        console.log(form?.result);
+        if (form?.result) {
+            score = form.result.success?.score||0;
+            if (form.result.success) {
+                heat++;
+                heatTimer = defaultHeatTime;
+            } else {
+                heat = 0;
+                heatTimer = 0;
+            }
+        }
+    }
+
+
+    const myEnhance = ({}) => {
+        // `formElement` is this `<form>` element
+        // `formData` is its `FormData` object that's about to be submitted
+        // `action` is the URL to which the form is posted
+        // calling `cancel()` will prevent the submission
+        // `submitter` is the `HTMLElement` that caused the form to be submitted
+
+        return async ({ result }: { result: ActionResult }) => {
+            // `result` is an `ActionResult` object
+            // `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
+            await applyAction(result);
+            Continue();
+        };
+    };
 </script>
 
 <div class="horizontalbox">
-    <h3>Category</h3>
-    <h1>{question}</h1>
+    <h3 style="margin-bottom: 0;">{category}</h3>
+    <h1 style="margin: 0;">{question}</h1>
     <div class="row">
         <p>&#128293;</p>
         <div class="heatbar">
-            <div style="width:{(heatTimer/defaultHeatTime)*100}%;"></div>
+            <div style="width:{(heatTimer / defaultHeatTime) * 100}%;" />
         </div>
         <p>{heat}</p>
     </div>
-    <div></div>
-    <form action="" class="formbox" use:enhance>
-        <button type="submit" class="buttonbox cyan-button">Option 1</button>
-        <button type="submit" class="buttonbox sky-button">Option 2</button>
-        <button type="submit" class="buttonbox peach-button">Option 3</button>
-        <button type="submit" class="buttonbox signal-button">Skip Question</button>
+    <div />
+    <form
+        action="?/submitAnswer"
+        method="POST"
+        class="formbox"
+        use:enhance={myEnhance}
+    >
+        <input type="hidden" name="S" value={data.slug} />
+        <input type="hidden" name="H" value={heat} />
+        <input type="hidden" name="C" value={correct == 0} />
+        <input type="hidden" name="CI" value={current} />
+        <button type="submit" class="buttonbox cyan-button">{answer1}</button>
     </form>
+    <form
+        action="?/submitAnswer"
+        method="POST"
+        class="formbox"
+        use:enhance={myEnhance}
+    >
+        <input type="hidden" name="S" value={data.slug} />
+        <input type="hidden" name="H" value={heat} />
+        <input type="hidden" name="C" value={correct == 1} />
+        <input type="hidden" name="CI" value={current} />
+        <button type="submit" class="buttonbox sky-button">{answer2}</button>
+    </form>
+    <form
+        action="?/submitAnswer"
+        method="POST"
+        class="formbox"
+        use:enhance={myEnhance}
+    >
+        <input type="hidden" name="S" value={data.slug} />
+        <input type="hidden" name="CI" value={current} />
+        <input type="hidden" name="H" value={heat} />
+        <input type="hidden" name="C" value={correct == 2} />
+        <button type="submit" class="buttonbox peach-button">{answer3}</button>
+    </form>
+    <h1><orange>Score:</orange> {score}</h1>
 </div>
