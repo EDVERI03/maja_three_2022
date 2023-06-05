@@ -48,4 +48,6 @@ model Quiz {
   questions Question[]
   score Int @default(0)
   heat Int @default(0)
+  startAtIndex Int @default(0)
+  currentRound Int @default(0)
 }

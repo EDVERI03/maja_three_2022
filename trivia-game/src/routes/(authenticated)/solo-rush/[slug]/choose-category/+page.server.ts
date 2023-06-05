@@ -5,8 +5,10 @@ import { SQLiteQuizler } from "$lib/implementations/SQLiteQuizler";
 
 export const load: PageServerLoad = async ({ locals, params }) => {
     const quizler: Quizler = new SQLiteQuizler()
+    await quizler.clearPrevious(params.slug)
+    const score = await quizler.getScore(params.slug)
 
-    return {slug: params.slug}
+    return {slug: params.slug, score}
 }
 
 export const actions: Actions = {

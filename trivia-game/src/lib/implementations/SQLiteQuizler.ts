@@ -19,10 +19,10 @@ export class SQLiteQuizler implements Quizler{
     async AddQuestions(slug: string, categoryName: string): Promise<boolean> {
         const category = await database.category.findUnique({where: {name: categoryName}, include: {questions: true}})
 
-        if (category?.questions && category!.questions.length >= 5) {
-            const questions: Array<Question> = category!.questions.sort(() => (Math.random() > .5) ? 1 : -1).slice(0, 5);
-            console.log(questions)
-            const result = await database.quiz.update({where: {id: slug}, data: {questions: {connect: [{id:questions[0].id}, {id:questions[1].id}, {id:questions[2].id}, {id:questions[3].id}, {id:questions[4].id} ]}}})
+        if (category?.questions && category!.questions.length >= 10) {
+            const questions: Array<Question> = category!.questions.sort(() => (Math.random() > .5) ? 1 : -1).slice(0, 10);
+
+            const result = await database.quiz.update({where: {id: slug}, data: {questions: {connect: [{id:questions[0].id}, {id:questions[1].id}, {id:questions[2].id}, {id:questions[3].id}, {id:questions[4].id}, {id:questions[5].id}, {id:questions[6].id}, {id:questions[7].id}, {id:questions[8].id}, {id:questions[9].id} ]}}})
             return true
         }
         return false
@@ -38,11 +38,13 @@ export class SQLiteQuizler implements Quizler{
 
     async submitAnswer(slug: string, correct: boolean, heat: number): Promise<Attempt<AnswerData>> {
         if (slug) {
+            const e = await database.quiz.update({where: {id:slug}, data: {startAtIndex: {increment: 1}}})
+            console.log(e.startAtIndex)
             if (correct) {
                 const result = await database.quiz.update({where: {id: slug}, data: {score: {increment: 100 + 10 * heat}}})
                 return {success: {correct: true, score: result.score}}
             } else {
-                const result = await database.quiz.findUniqueOrThrow({where: {id: slug}})
+                const result = await database.quiz.update({where: {id: slug}, data: {score: {increment: Math.round(-100/(heat+1))}}})
                 return {success: {correct: false, score: result.score}}
             }
         }
@@ -51,12 +53,27 @@ export class SQLiteQuizler implements Quizler{
 
     async IsEndOfRound(slug:string, currentIndex: number) {
         const result = await database.quiz.findUniqueOrThrow({where: {id: slug}, include: {questions: true}})
-        console.log(slug)
-        console.log(result.questions.toString())
-        console.log(result.questions.length)
-        console.log(currentIndex)
         if (result.questions.length == currentIndex+1) {
+            await database.quiz.update({where: {id: slug}, data: {currentRound: {increment: 1}}})
             return true
         } else return false
     } 
+
+    async getScore(slug: string): Promise<number> {
+        const result = await database.quiz.findUniqueOrThrow({where: {id: slug}})
+        return result.score;
+    }
+
+    async getCurrentIndex(slug: string): Promise<number> {
+        const result = await database.quiz.findUniqueOrThrow({where: {id: slug}})
+        return result.startAtIndex;
+    }
+
+    async clearPrevious(slug: string): Promise<boolean> {
+        const result = await database.quiz.update({where: {id: slug}, data: {questions: {set: []}}, include: {questions: true}})
+        if (result) {
+            return true;
+        }
+        else return false;
+    }
 }

@@ -24,4 +24,7 @@ export interface Quizler {
     loadQuestions(slug: string): Promise<Attempt<Array<QuestionData>>>
     submitAnswer(slug:string, correct:boolean, heat:number): Promise<Attempt<AnswerData>>
     IsEndOfRound(slug:string, currentIndex:number): Promise<boolean>
+    getScore(slug: string): Promise<number>
+    clearPrevious(slug: string): Promise<boolean>
+    getCurrentIndex(slug: string): Promise<number>
 }

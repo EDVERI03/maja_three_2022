@@ -520,6 +520,18 @@ orange {
   color: var(--SIGNAL-ORANGE);
 }
 
+cyan {
+  color: var(--VAPOR-CYAN);
+}
+
+red {
+  color: var(--ERROR-RED);
+}
+
+h1 {
+  text-align: center;
+}
+
 @media screen and (orientation: portrait) {
   .transparentbox {
     height: 5em;

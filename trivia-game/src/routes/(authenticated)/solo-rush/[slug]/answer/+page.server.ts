@@ -7,9 +7,11 @@ export const load: PageServerLoad = async ({ params }) => {
     //Get array of question objects
     const quizler = new SQLiteQuizler()
     const questiondata = await quizler.loadQuestions(params.slug)
+    const score = await quizler.getScore(params.slug)
+    const currentIndex = await quizler.getCurrentIndex(params.slug)
     if (questiondata.success) {
-        //Return data with array, current category and slug?
-        return {questions: questiondata, score: 0, slug: params.slug}
+        //Return data with array, score and slug? (And current index)
+        return {questions: questiondata, score, slug: params.slug, currentIndex}
     }
     throw fail(400, {message: "could not fetch data"})
 }

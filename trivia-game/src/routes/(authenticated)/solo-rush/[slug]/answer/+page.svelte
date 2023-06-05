@@ -3,7 +3,10 @@
     import type { ActionResult } from "@sveltejs/kit";
     import type { ActionData, PageServerData } from "./$types";
 
-    let current = 0;
+    export let data: PageServerData;
+    export let form: ActionData;
+    
+    let current = data.currentIndex;
     let category = "CATEGORY";
     let question = "QUESTION";
     let answer1 = "ANSWER";
@@ -13,15 +16,28 @@
     let defaultHeatTime = 70;
     let heatTimer = 0;
     let heat = 0;
-    let score = 0;
+    let score = data.score;
+    let animatedScore = score;
+    const scoreAnimationDelay = 100;
+    let scoreAnimationDelayTimer = scoreAnimationDelay;
 
     setInterval(() => {
         if (heatTimer > 0) heatTimer--;
         if (heatTimer <= 0 && heat > 0) heat = 0;
     }, 100);
 
-    export let data: PageServerData;
-    export let form: ActionData;
+    setInterval(() => {
+        if (scoreAnimationDelayTimer > 0) {
+            scoreAnimationDelayTimer--
+        } else {
+            if (animatedScore < score) {
+                animatedScore++
+            } else if (animatedScore > score) {
+                animatedScore--
+            }
+        }
+    }, 5)
+
 
     Reload();
 
@@ -32,6 +48,7 @@
         answer2 = data.questions.success[current].answer2;
         answer3 = data.questions.success[current].answer3;
         correct = data.questions.success[current].correct;
+        scoreAnimationDelayTimer = scoreAnimationDelay
     }
 
     function Continue() {
@@ -40,14 +57,13 @@
             current++; 
         } else {
             console.log("beep boop, doing the other thing")
-            
         }
         Reload();
         console.log("did shit");
         console.log(form?.result);
         if (form?.result) {
             score = form.result.success?.score||0;
-            if (form.result.success) {
+            if (form.result.success?.correct) {
                 heat++;
                 heatTimer = defaultHeatTime;
             } else {
@@ -121,5 +137,13 @@
         <input type="hidden" name="C" value={correct == 2} />
         <button type="submit" class="buttonbox peach-button">{answer3}</button>
     </form>
-    <h1><orange>Score:</orange> {score}</h1>
+    <div>
+        <h1><orange>Score:</orange> {animatedScore}</h1>
+        {#if animatedScore < score }
+            <h1 style="margin-left: 75px;"><cyan>+{score - animatedScore}</cyan></h1>
+        {:else if animatedScore> score} 
+        <h1 style="margin-left: 75px;"><red>- {animatedScore - score}</red></h1>
+        {/if}
+    </div>
+
 </div>
