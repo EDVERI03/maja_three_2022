@@ -88,4 +88,21 @@ export class SQLiteQuizler implements Quizler{
             return {success: cut}
         } else {return {error: {code: 400, data: "not enough suitable categories could be found"}}}
     }
+    async isGameComplete(slug: string): Promise<Boolean> {
+        const result = await database.quiz.findUniqueOrThrow({where: {id: slug}});
+
+        return result.currentRound >= 3;
+    }
+    async SRsaveHighscore(slug: string): Promise<number> {
+        const quiz = await database.quiz.findUniqueOrThrow({where: {id:slug}, include: {owner: true}})
+        const highScore = await database.highScore.findFirst({where: {type: "SR"}})
+        if (highScore) {
+            if (highScore.score > quiz.score) {
+                return highScore.score;
+            }
+            await database.highScore.deleteMany({where: {ownerId: quiz.ownerId, type: "SR"}})
+        }
+        await database.highScore.create({data: {type: "SR", score: quiz.score, ownerId: quiz.ownerId}})
+        return quiz.score;
+    }
 }

@@ -6,8 +6,14 @@ import { SQLiteQuizler } from "$lib/implementations/SQLiteQuizler";
 export const load: PageServerLoad = async ({ locals, params }) => {
     const quizler: Quizler = new SQLiteQuizler()
     await quizler.clearPrevious(params.slug)
+
+    if (await quizler.isGameComplete(params.slug)) {
+        throw redirect(302, `./result`)
+    }
+
     const score = await quizler.getScore(params.slug)
     const categories = await quizler.getRandomCategories(params.slug)
+
 
     return {slug: params.slug, score, categories}
 }

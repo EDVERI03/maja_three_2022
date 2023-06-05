@@ -92,7 +92,7 @@
 
 <div class="horizontalbox">
     <h3 style="margin-bottom: 0;">{category}</h3>
-    <h1 style="margin: 0;">{question}</h1>
+    <h1 style="margin: 0; max-width: 90%; width:25em;">{question}</h1>
     <div class="row">
         <p>&#128293;</p>
         <div class="heatbar">

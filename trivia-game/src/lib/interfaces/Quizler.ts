@@ -29,4 +29,6 @@ export interface Quizler {
     clearPrevious(slug: string): Promise<boolean>
     getCurrentIndex(slug: string): Promise<number>
     getRandomCategories(slug: string): Promise<Attempt<Array<string>>>
+    isGameComplete(slug: string): Promise<Boolean>
+    SRsaveHighscore(slug: string): Promise<number>
 }
