@@ -54,7 +54,7 @@ export class SQLiteQuizler implements Quizler{
     async IsEndOfRound(slug:string, currentIndex: number) {
         const result = await database.quiz.findUniqueOrThrow({where: {id: slug}, include: {questions: true}})
         if (result.questions.length == currentIndex+1) {
-            await database.quiz.update({where: {id: slug}, data: {currentRound: {increment: 1}}})
+            await database.quiz.update({where: {id: slug}, data: {currentRound: {increment: 1}, startAtIndex: 0}})
             return true
         } else return false
     } 
