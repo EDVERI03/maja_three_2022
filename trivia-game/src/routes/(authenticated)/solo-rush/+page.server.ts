@@ -7,7 +7,7 @@ import { fail } from "assert";
 export const load: PageServerLoad = async ({ locals }) => {
     const quizler: Quizler = new SQLiteQuizler()
     
-    const result = await quizler.StartQuiz()
+    const result = await quizler.StartQuiz(locals.sessionId)
 
     if (result.success) {
         throw redirect(300, `solo-rush/${result.success.slug}/choose-category`)

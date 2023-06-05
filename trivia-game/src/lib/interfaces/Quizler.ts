@@ -19,7 +19,7 @@ export interface Quizler {
      * @param correct A boolean describing if the player answered correctly.
      * @param heat Players current heat score
      */
-    StartQuiz(): Promise<StartQuizResult>
+    StartQuiz(session: string): Promise<StartQuizResult>
     AddQuestions(slug: string, category: string): Promise<boolean>
     loadQuestions(slug: string): Promise<Attempt<Array<QuestionData>>>
     submitAnswer(slug:string, correct:boolean, heat:number): Promise<Attempt<AnswerData>>

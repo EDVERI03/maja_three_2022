@@ -5,9 +5,11 @@ import type { Question } from "@prisma/client";
 import * as crypto from "crypto"
 
 export class SQLiteQuizler implements Quizler{
-    async StartQuiz(): Promise<StartQuizResult> {
-        
-        const quiz = await database.quiz.create({data: {}})
+    async StartQuiz(session: string): Promise<StartQuizResult> {
+
+        const user = await database.user.findUniqueOrThrow({where: {session}})
+        await database.quiz.deleteMany({where: {ownerId: user.id}}) 
+        const quiz = await database.quiz.create({data: {ownerId:user.id}})
 
         if (quiz.id) {
             return {success: {slug: quiz.id}}
@@ -38,8 +40,7 @@ export class SQLiteQuizler implements Quizler{
 
     async submitAnswer(slug: string, correct: boolean, heat: number): Promise<Attempt<AnswerData>> {
         if (slug) {
-            const e = await database.quiz.update({where: {id:slug}, data: {startAtIndex: {increment: 1}}})
-            console.log(e.startAtIndex)
+            await database.quiz.update({where: {id:slug}, data: {startAtIndex: {increment: 1}}})
             if (correct) {
                 const result = await database.quiz.update({where: {id: slug}, data: {score: {increment: 100 + 10 * heat}}})
                 return {success: {correct: true, score: result.score}}

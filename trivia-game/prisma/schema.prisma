@@ -19,6 +19,7 @@ model user {
   session String @unique 
   verified Boolean @default(false)
   admin Boolean @default(false)
+  srQuizes Quiz[]
 }
 
 model Category {
@@ -50,4 +51,6 @@ model Quiz {
   heat Int @default(0)
   startAtIndex Int @default(0)
   currentRound Int @default(0)
+  owner user @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  ownerId Int
 }
