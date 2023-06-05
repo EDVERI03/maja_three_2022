@@ -18,6 +18,7 @@ export interface Quizler {
      * @param slug browser pathway slug
      * @param correct A boolean describing if the player answered correctly.
      * @param heat Players current heat score
+     * @param currentIndex index of the question that the player should be on if the page where to reload mid round
      */
     StartQuiz(session: string): Promise<StartQuizResult>
     AddQuestions(slug: string, category: string): Promise<boolean>
@@ -27,4 +28,5 @@ export interface Quizler {
     getScore(slug: string): Promise<number>
     clearPrevious(slug: string): Promise<boolean>
     getCurrentIndex(slug: string): Promise<number>
+    getRandomCategories(slug: string): Promise<Attempt<Array<string>>>
 }

@@ -524,12 +524,51 @@ cyan {
   color: var(--VAPOR-CYAN);
 }
 
+blue {
+  color: var(--SKY-BLUE);
+}
+
+peach {
+  color: var(--VAPOR-PEACH);
+}
+
 red {
   color: var(--ERROR-RED);
 }
 
 h1 {
   text-align: center;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.title {
+  width: 40em;
+  height: 10em;
+  position: relative;
+}
+
+.title h1 {
+  left: 50%;
+  transform: translate(-50%, 0);
+  font-size: 3.5em;
+}
+
+.scorebox {
+  background-color: var(--DARK-GRAY);
+  border-radius: 2em;
+
+  max-width: 90%;
+  width: 30em;
+
+  margin-bottom: 5em;
+}
+
+.scorebox h1 {
+  margin: 10px;
+  text-align: start;
 }
 
 @media screen and (orientation: portrait) {

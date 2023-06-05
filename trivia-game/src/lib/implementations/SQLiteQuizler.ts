@@ -32,6 +32,7 @@ export class SQLiteQuizler implements Quizler{
 
     async loadQuestions(slug: string): Promise<Attempt<QuestionData[]>> {
         const questiondata = (await database.quiz.findUnique({where: {id: slug}, include: {questions: {include: {answers: true, category: true}}}}))?.questions.map((e) => {return {category: e.category.name, id: e.id,title: e.title, answer1: e.answers[0].title, answer2: e.answers[1].title, answer3: e.answers[2].title, correct: e.answers.findIndex((f) => {return f.correct})}})
+        questiondata?.sort((a,b) => {return Math.random() - 0.5})
         if (questiondata) {
             return {success: questiondata}
         }
@@ -76,5 +77,15 @@ export class SQLiteQuizler implements Quizler{
             return true;
         }
         else return false;
+    }
+    async getRandomCategories(slug: string): Promise<Attempt<string[]>> {
+        const result = await database.category.findMany({where: {}, include: {questions: true}})
+        const rinsed = result.filter((e) => {return (e.questions.length >= 10)})
+        const simplified = rinsed.map((e) => {return e.name})
+        const randomized = simplified.sort((a,b) => {return Math.random() - 0.5})
+        const cut = randomized.slice(0,3)
+        if (rinsed && rinsed.length >= 3) {
+            return {success: cut}
+        } else {return {error: {code: 400, data: "not enough suitable categories could be found"}}}
     }
 }
