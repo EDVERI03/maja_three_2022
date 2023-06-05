@@ -15,8 +15,8 @@
         </a>
         <span class="vbreak"/>
         {#if data.isAdmin}
-            <a href="/settings">
-                <button class="navbutton">SETTINGS</button>
+            <a href="/leaderboard">
+                <button class="navbutton">LEADERBOARD</button>
             </a>
 
             <span class="vbreak"></span>
@@ -25,8 +25,8 @@
                 <button class="navbutton nbright adminbutton">EDIT QUIZ</button>    
             </a>
         {:else}
-            <a href="/settings">
-                <button class="navbutton nbright">SETTINGS</button>
+            <a href="/leaderboard">
+                <button class="navbutton nbright">LEADERBOARD</button>
             </a>
         {/if}
 

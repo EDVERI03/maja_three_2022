@@ -21,6 +21,7 @@ export interface Quizler {
      * @param currentIndex index of the question that the player should be on if the page where to reload mid round
      */
     StartQuiz(session: string): Promise<StartQuizResult>
+    StartSurvival(session: string): Promise<StartQuizResult>
     AddQuestions(slug: string, category: string): Promise<boolean>
     loadQuestions(slug: string): Promise<Attempt<Array<QuestionData>>>
     submitAnswer(slug:string, correct:boolean, heat:number): Promise<Attempt<AnswerData>>
@@ -28,7 +29,7 @@ export interface Quizler {
     getScore(slug: string): Promise<number>
     clearPrevious(slug: string): Promise<boolean>
     getCurrentIndex(slug: string): Promise<number>
-    getRandomCategories(slug: string): Promise<Attempt<Array<string>>>
+    getRandomCategories(): Promise<Attempt<Array<string>>>
     isGameComplete(slug: string): Promise<Boolean>
     SRsaveHighscore(slug: string): Promise<number>
 }

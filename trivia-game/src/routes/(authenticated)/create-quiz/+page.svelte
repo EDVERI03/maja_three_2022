@@ -1,8 +1,6 @@
 <script>
     import { enhance } from "$app/forms";
     import Halftone from "$lib/assets/halftone.svelte";
-    import Optionblock from "$lib/assets/optionblock.svelte";
-    import { each } from "svelte/internal";
 
     let questions = ["question1"]
 

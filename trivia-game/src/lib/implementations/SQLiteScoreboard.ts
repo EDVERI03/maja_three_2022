@@ -1,6 +1,6 @@
 import { database } from "$lib/database";
 import type { Attempt } from "$lib/interfaces/Quizler";
-import type { CompeditorData, Scoreboard } from "$lib/interfaces/Scoreboard";
+import type { CompeditorData, EntryData, Scoreboard } from "$lib/interfaces/Scoreboard";
 
 export class SQLiteScoreboard implements Scoreboard {
     async GetHighestScoreOfType(type: string): Promise<number> {
@@ -17,5 +17,17 @@ export class SQLiteScoreboard implements Scoreboard {
             return {success: {name: sortScore[0].owner.username, difference: sortScore[0].score - score}}
         }
         return {error: {code: 400, data: "could not find close compeditor"}}
+    }
+
+    async GetScoreboardOfType(type: string): Promise<Attempt<EntryData[]>> {
+        const board = (await database.highScore.findMany({where: {type}, include: {owner: {select: {username: true}}}})).map((e) => {
+            return {name: e.owner.username, score: e.score}
+        }).sort((a,b) => {
+            return b.score - a.score
+        })
+        if (board[0]) {
+            return {success: board}
+        } 
+        return {error: {code: 400, data: "could not find any entries for specified type"}}
     }
 }

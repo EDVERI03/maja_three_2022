@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ locals, params }) => {
     }
 
     const score = await quizler.getScore(params.slug)
-    const categories = await quizler.getRandomCategories(params.slug)
+    const categories = await quizler.getRandomCategories()
 
 
     return {slug: params.slug, score, categories}

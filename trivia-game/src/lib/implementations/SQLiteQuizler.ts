@@ -18,6 +18,19 @@ export class SQLiteQuizler implements Quizler{
         return {error: {code: 400, data: "could not create quiz"}}
     }
 
+    async StartSurvival(session: string): Promise<StartQuizResult> {
+
+        const user = await database.user.findUniqueOrThrow({where: {session}})
+        await database.survival.deleteMany({where: {ownerId: user.id}}) 
+        const quiz = await database.survival.create({data: {ownerId:user.id}})
+
+        if (quiz.id) {
+            return {success: {slug: quiz.id}}
+        }
+
+        return {error: {code: 400, data: "could not create survival"}}
+    }
+
     async AddQuestions(slug: string, categoryName: string): Promise<boolean> {
         const category = await database.category.findUnique({where: {name: categoryName}, include: {questions: true}})
 
@@ -46,7 +59,7 @@ export class SQLiteQuizler implements Quizler{
                 const result = await database.quiz.update({where: {id: slug}, data: {score: {increment: 100 + 10 * heat}}})
                 return {success: {correct: true, score: result.score}}
             } else {
-                const result = await database.quiz.update({where: {id: slug}, data: {score: {increment: Math.round(-100/(heat+1))}}})
+                const result = await database.quiz.update({where: {id: slug}, data: {score: {increment: - 100 + 10 * heat}}})
                 return {success: {correct: false, score: result.score}}
             }
         }
@@ -78,7 +91,7 @@ export class SQLiteQuizler implements Quizler{
         }
         else return false;
     }
-    async getRandomCategories(slug: string): Promise<Attempt<string[]>> {
+    async getRandomCategories(): Promise<Attempt<string[]>> {
         const result = await database.category.findMany({where: {}, include: {questions: true}})
         const rinsed = result.filter((e) => {return (e.questions.length >= 10)})
         const simplified = rinsed.map((e) => {return e.name})

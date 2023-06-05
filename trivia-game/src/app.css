@@ -571,6 +571,31 @@ h1 {
   text-align: start;
 }
 
+.rowbox {
+  max-width: 90%;
+  width: 40em;
+  display: flex;
+  flex-direction: row;
+}
+
+.boardbox {
+  width: 50%;
+}
+
+.tablebox p {
+  margin: 0;
+  text-align: center;
+}
+
+.tablebox p:nth-child(2n) {
+  background-color: var(--DARK-GRAY);
+}
+
+
+.center-text {
+  text-align: center;
+}
+
 @media screen and (orientation: portrait) {
   .transparentbox {
     height: 5em;
