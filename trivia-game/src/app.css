@@ -594,21 +594,13 @@ h1 {
   width:25em;
 }
 
-@media screen and (orientation: portrait) {
-  .peach-button:hover span {
-    color: var(--VAPOR-PEACH);
-  }
-
+@media screen and (orientation: landscape) {
   .sky-button:hover {
     outline-color: var(--SKY-BLUE);
     color:var(--SKY-BLUE);
     accent-color: var(--SKY-BLUE);
   }
   
-  .cyan-button:hover span {
-    color: var(--VAPOR-CYAN);
-  }
-
   .peach-button:hover{
     outline-color: var(--VAPOR-PEACH);
     color: var(--VAPOR-PEACH);
@@ -626,14 +618,21 @@ h1 {
     color: var(--SIGNAL-ORANGE);
     accent-color: var(--SIGNAL-ORANGE);
   }
-  
   .sky-button:hover span {
     color: var(--SKY-BLUE)
   }
-  
   .signal-button:hover span {
     color: var(--SIGNAL-ORANGE)
   }
+  .cyan-button:hover span {
+    color: var(--VAPOR-CYAN);
+  }
+  .peach-button:hover span {
+    color: var(--VAPOR-PEACH);
+  }
+}
+
+@media screen and (orientation: portrait) {
   .transparentbox {
     height: 5em;
   }
