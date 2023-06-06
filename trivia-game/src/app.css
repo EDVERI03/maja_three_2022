@@ -265,11 +265,7 @@ input:-webkit-autofill:active {
     accent-color: var(--SKY-BLUE);
   }
 
-  .peach-button:hover{
-    outline-color: var(--VAPOR-PEACH);
-    color: var(--VAPOR-PEACH);
-    accent-color: var(--VAPOR-PEACH);
-  }
+
 
   .peach-button:active{
     background-color: var(--VAPOR-PEACH);
@@ -277,11 +273,7 @@ input:-webkit-autofill:active {
     color: var(--PURE-WHITE);
   }
 
-  .cyan-button:hover{
-    outline-color: var(--VAPOR-CYAN);
-    color: var(--VAPOR-CYAN);
-    accent-color: var(--VAPOR-CYAN);
-  }
+
 
   .cyan-button:active {
     background-color: var(--VAPOR-CYAN);
@@ -289,11 +281,6 @@ input:-webkit-autofill:active {
     color: var(--PURE-WHITE);
   }
 
-  .signal-button:hover {
-    outline-color: var(--SIGNAL-ORANGE);
-    color: var(--SIGNAL-ORANGE);
-    accent-color: var(--SIGNAL-ORANGE);
-  }
 
   .signal-button:active {
     background-color: var(--SIGNAL-ORANGE);
@@ -301,11 +288,7 @@ input:-webkit-autofill:active {
     color: var(--PURE-WHITE);
   }
 
-  .sky-button:hover {
-    outline-color: var(--SKY-BLUE);
-    color:var(--SKY-BLUE);
-    accent-color: var(--SKY-BLUE);
-  }
+
 
   .sky-button:active {
     background-color: var(--SKY-BLUE);
@@ -615,9 +598,33 @@ h1 {
   .peach-button:hover span {
     color: var(--VAPOR-PEACH);
   }
+
+  .sky-button:hover {
+    outline-color: var(--SKY-BLUE);
+    color:var(--SKY-BLUE);
+    accent-color: var(--SKY-BLUE);
+  }
   
   .cyan-button:hover span {
     color: var(--VAPOR-CYAN);
+  }
+
+  .peach-button:hover{
+    outline-color: var(--VAPOR-PEACH);
+    color: var(--VAPOR-PEACH);
+    accent-color: var(--VAPOR-PEACH);
+  }
+
+  .cyan-button:hover{
+    outline-color: var(--VAPOR-CYAN);
+    color: var(--VAPOR-CYAN);
+    accent-color: var(--VAPOR-CYAN);
+  }
+
+  .signal-button:hover {
+    outline-color: var(--SIGNAL-ORANGE);
+    color: var(--SIGNAL-ORANGE);
+    accent-color: var(--SIGNAL-ORANGE);
   }
   
   .sky-button:hover span {
