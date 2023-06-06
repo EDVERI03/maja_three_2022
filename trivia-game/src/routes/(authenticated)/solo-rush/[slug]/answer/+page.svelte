@@ -71,36 +71,27 @@
                 heatTimer = 0;
             }
         }
+        if (document.activeElement instanceof HTMLElement){
+            document.activeElement.blur();
+        }
     }
 
 
     const myEnhance = ({}) => {
-    // `formElement` is this `<form>` element
-    // `formData` is its `FormData` object that's about to be submitted
-    // `action` is the URL to which the form is posted
-    // calling `cancel()` will prevent the submission
-    // `submitter` is the `HTMLElement` that caused the form to be submitted
+        // `formElement` is this `<form>` element
+        // `formData` is its `FormData` object that's about to be submitted
+        // `action` is the URL to which the form is posted
+        // calling `cancel()` will prevent the submission
+        // `submitter` is the `HTMLElement` that caused the form to be submitted
 
-    return async ({
-      result,
-      update,
-    }: {
-      result: ActionResult;
-      update: (
-        options?:
-          | {
-              reset: boolean;
-            }
-          | undefined
-      ) => Promise<void>;
-    }) => {
-      // `result` is an `ActionResult` object
-      // `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
-      await applyAction(result);
-      await update({ reset: true });
-      Continue();
+        return async ({ result }: { result: ActionResult }) => {
+            // `result` is an `ActionResult` object
+            // `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
+            await applyAction(result);
+            await update({ reset: true });
+            Continue();
+        };
     };
-  };
 </script>
 
 <div class="horizontalbox">
