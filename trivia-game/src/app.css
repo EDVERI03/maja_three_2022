@@ -464,22 +464,6 @@ input:-webkit-autofill:active {
   color: var(--DARK-GRAY);
 }
 
-.peach-button:hover span {
-  color: var(--VAPOR-PEACH);
-}
-
-.cyan-button:hover span {
-  color: var(--VAPOR-CYAN);
-}
-
-.sky-button:hover span {
-  color: var(--SKY-BLUE)
-}
-
-.signal-button:hover span {
-  color: var(--SIGNAL-ORANGE)
-}
-
 .roundbutton:active span {
   color: var(--PURE-WHITE);
 }
@@ -628,6 +612,21 @@ h1 {
 }
 
 @media screen and (orientation: portrait) {
+  .peach-button:hover span {
+    color: var(--VAPOR-PEACH);
+  }
+  
+  .cyan-button:hover span {
+    color: var(--VAPOR-CYAN);
+  }
+  
+  .sky-button:hover span {
+    color: var(--SKY-BLUE)
+  }
+  
+  .signal-button:hover span {
+    color: var(--SIGNAL-ORANGE)
+  }
   .transparentbox {
     height: 5em;
   }
