@@ -10,6 +10,15 @@ export class SQLiteScoreboard implements Scoreboard {
         return sortedScores[0]
     }
 
+    async GetPersonalHighscoreOfType(session: string, type:string): Promise<Attempt<EntryData>> {
+        const user = await database.user.findUniqueOrThrow({where: {session}})
+        const result = await database.highScore.findFirst({where: {ownerId: user.id, type}})
+        if (result) {
+            return {success: {score: result.score, name: user.username}}
+        }
+        return {error: {code: 400, data: "could not locate highscore"}}
+    }
+
     async GetCloseCompeditor(type: string, score: number): Promise<Attempt<CompeditorData>> {
         const highscores = await database.highScore.findMany({where: {type, score: {gt: score}}, include: {owner: {select: {username: true}}}})
         if (highscores[0]) {

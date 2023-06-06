@@ -10,4 +10,5 @@ export interface Scoreboard {
     GetHighestScoreOfType(type: string): Promise<number>
     GetCloseCompeditor(type: string, score: number): Promise<Attempt<CompeditorData>>
     GetScoreboardOfType(type: string): Promise<Attempt<Array<EntryData>>>
+    GetPersonalHighscoreOfType(session: string, type:string): Promise<Attempt<EntryData>>
 }

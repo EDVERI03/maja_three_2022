@@ -3,7 +3,7 @@ import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ params }) => {
     const Scoreboard = new SQLiteScoreboard()
-    const SRScores = Scoreboard.GetScoreboardOfType("SR")
-    const SurvivalScores = Scoreboard.GetScoreboardOfType("Survival")
+    const SRScores = await Scoreboard.GetScoreboardOfType("SR")
+    const SurvivalScores = await Scoreboard.GetScoreboardOfType("Survival")
     return ({SRScores, SurvivalScores})
 }
