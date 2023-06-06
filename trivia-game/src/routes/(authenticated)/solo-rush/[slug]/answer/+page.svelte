@@ -81,7 +81,7 @@
         // calling `cancel()` will prevent the submission
         // `submitter` is the `HTMLElement` that caused the form to be submitted
 
-        return async ({ result }: { result: ActionResult }) => {
+        return async ({ result, update }: { result: ActionResult, update: any }) => {
             // `result` is an `ActionResult` object
             // `update` is a function which triggers the default logic that would be triggered if this callback wasn't set
             await applyAction(result);
