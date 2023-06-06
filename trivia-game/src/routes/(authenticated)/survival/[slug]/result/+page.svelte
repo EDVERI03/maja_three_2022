@@ -15,8 +15,6 @@
 
     const compeditor = data.compeditor
 
-    console.log(compeditor)
-
     setInterval(() => {
         //TODO: simplify this into a function that can be used for each step
         if (scoreAnimationDelayTimer > 0) {

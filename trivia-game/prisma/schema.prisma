@@ -63,9 +63,11 @@ model Quiz {
 
 model Survival {
   id String @id @default(uuid())
-  questions Question[]
+  currentquestion Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  questionId Int
   score Int @default(0)
   heat Int @default(0)
+  health Int @default(3)
   owner user @relation(fields: [ownerId], references: [id], onDelete: Cascade)
   ownerId Int
 }

@@ -22,14 +22,20 @@ export interface Quizler {
      */
     StartQuiz(session: string): Promise<StartQuizResult>
     StartSurvival(session: string): Promise<StartQuizResult>
+    SurvivalGetQuestionData(slug: string): Promise<Attempt<QuestionData>>
     AddQuestions(slug: string, category: string): Promise<boolean>
     loadQuestions(slug: string): Promise<Attempt<Array<QuestionData>>>
     submitAnswer(slug:string, correct:boolean, heat:number): Promise<Attempt<AnswerData>>
+    SurvivalSubmitAnswer(slug:string, correct:boolean, heat:number): Promise<Attempt<AnswerData>>
+    SurvivalLoadNewQuestion(slug:string): Promise<void>
+    SurvivalStepsUntilDeath(slug: string): Promise<number>
     IsEndOfRound(slug:string, currentIndex:number): Promise<boolean>
     getScore(slug: string): Promise<number>
+    SurvivalGetScore(slug: string): Promise<Number>
     clearPrevious(slug: string): Promise<boolean>
     getCurrentIndex(slug: string): Promise<number>
     getRandomCategories(): Promise<Attempt<Array<string>>>
     isGameComplete(slug: string): Promise<Boolean>
     SRsaveHighscore(slug: string): Promise<number>
+    SurvivalSaveHighscore(slug: string): Promise<number>
 }

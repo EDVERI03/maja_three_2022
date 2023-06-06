@@ -15,5 +15,8 @@
         <a href="/solo-rush" style="width:inherit; max-width:inherit;">
             <button type="button" class="buttonbox cyan-button">SOLO RUSH</button>
         </a>
+        <a href="/survival" style="width:inherit; max-width:inherit;">
+            <button type="button" class="buttonbox sky-button">SURVIVAL</button>
+        </a>
     </div>
 </div>

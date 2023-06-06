@@ -22,13 +22,24 @@ export class SQLiteQuizler implements Quizler{
 
         const user = await database.user.findUniqueOrThrow({where: {session}})
         await database.survival.deleteMany({where: {ownerId: user.id}}) 
-        const quiz = await database.survival.create({data: {ownerId:user.id}})
+
+        const question = (await database.question.findMany({where: {}})).sort((a,b) => {return Math.random() - 0.5})[0]
+
+        const quiz = await database.survival.create({data: {ownerId:user.id, questionId: question.id}})
 
         if (quiz.id) {
             return {success: {slug: quiz.id}}
         }
 
         return {error: {code: 400, data: "could not create survival"}}
+    }
+
+    async SurvivalGetQuestionData(slug: string): Promise<Attempt<QuestionData>> {
+        const quiz = await database.survival.findUnique({where: {id: slug}, include: {currentquestion: {include: {answers: true, category: {select: {name: true}}}}}})
+        if (quiz) {
+            return {success: {title: quiz.currentquestion.title, answer1: quiz.currentquestion.answers[0].title, answer2: quiz.currentquestion.answers[1].title, answer3: quiz.currentquestion.answers[2].title, category: quiz.currentquestion.category.name, correct: quiz.currentquestion.answers.findIndex((e) => {return e.correct})}}
+        }
+        return {error: {code: 400, data: "could not find questiondata"}}
     }
 
     async AddQuestions(slug: string, categoryName: string): Promise<boolean> {
@@ -66,6 +77,29 @@ export class SQLiteQuizler implements Quizler{
         return {error: {code: 400, data: "Could not complete request"}}
     }
 
+    async SurvivalSubmitAnswer(slug: string, correct: boolean, heat: number): Promise<Attempt<AnswerData>> {
+        if (slug) {
+            if (correct) {
+                const result = await database.survival.update({where: {id: slug}, data: {score: {increment: 100 + 10 * heat}}})
+                return {success: {correct: true, score: result.score}}
+            } else {
+                const result = await database.survival.update({where: {id: slug}, data: {health: {increment: -1}}})
+                return {success: {correct: false, score: result.score}}
+            }
+        }
+        return {error: {code: 400, data: "Could not complete request"}}
+    }
+
+    async SurvivalLoadNewQuestion(slug: string): Promise<void> {
+        const question = (await database.question.findMany({where: {}})).sort((a,b) => {return Math.random() - 0.5})[0]
+        await database.survival.update({where: {id:slug}, data:{questionId: question.id}})
+    }
+
+    async SurvivalStepsUntilDeath(slug: string): Promise<number> {
+        return (await database.survival.findUniqueOrThrow({where: {id: slug}})).health;
+
+    }
+
     async IsEndOfRound(slug:string, currentIndex: number) {
         const result = await database.quiz.findUniqueOrThrow({where: {id: slug}, include: {questions: true}})
         if (result.questions.length == currentIndex+1) {
@@ -76,6 +110,11 @@ export class SQLiteQuizler implements Quizler{
 
     async getScore(slug: string): Promise<number> {
         const result = await database.quiz.findUniqueOrThrow({where: {id: slug}})
+        return result.score;
+    }
+
+    async SurvivalGetScore(slug: string): Promise<number> {
+        const result = await database.survival.findUniqueOrThrow({where: {id: slug}})
         return result.score;
     }
 
@@ -108,7 +147,7 @@ export class SQLiteQuizler implements Quizler{
     }
     async SRsaveHighscore(slug: string): Promise<number> {
         const quiz = await database.quiz.findUniqueOrThrow({where: {id:slug}, include: {owner: true}})
-        const highScore = await database.highScore.findFirst({where: {type: "SR"}})
+        const highScore = await database.highScore.findFirst({where: {type: "SR", ownerId: quiz.ownerId}})
         if (highScore) {
             if (highScore.score > quiz.score) {
                 return highScore.score;
@@ -116,6 +155,18 @@ export class SQLiteQuizler implements Quizler{
             await database.highScore.deleteMany({where: {ownerId: quiz.ownerId, type: "SR"}})
         }
         await database.highScore.create({data: {type: "SR", score: quiz.score, ownerId: quiz.ownerId}})
+        return quiz.score;
+    }
+    async SurvivalSaveHighscore(slug: string): Promise<number> {
+        const quiz = await database.survival.findUniqueOrThrow({where: {id:slug}, include: {owner: true}})
+        const highScore = await database.highScore.findFirst({where: {type: "Survival", ownerId: quiz.ownerId}})
+        if (highScore) {
+            if (highScore.score > quiz.score) {
+                return highScore.score;
+            }
+            await database.highScore.deleteMany({where: {ownerId: quiz.ownerId, type: "Survival"}})
+        }
+        await database.highScore.create({data: {type: "Survival", score: quiz.score, ownerId: quiz.ownerId}})
         return quiz.score;
     }
 }

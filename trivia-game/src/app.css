@@ -514,26 +514,37 @@ input:-webkit-autofill:active {
   display: flex;
   flex-direction: row;
   align-items: center;
+  max-width: 90%;
 }
 
 orange {
   color: var(--SIGNAL-ORANGE);
+  stroke: var(--SIGNAL-ORANGE);
+  fill: var(--SIGNAL-ORANGE);
 }
 
 cyan {
   color: var(--VAPOR-CYAN);
+  stroke: var(--VAPOR-CYAN);
+  fill: var(--VAPOR-CYAN);
 }
 
 blue {
   color: var(--SKY-BLUE);
+  stroke: var(--SKY-BLUE);
+  fill: var(--SKY-BLUE)
 }
 
 peach {
   color: var(--VAPOR-PEACH);
+  stroke: var(--VAPOR-PEACH);
+  fill: var(--VAPOR-PEACH);
 }
 
 red {
   color: var(--ERROR-RED);
+  stroke: var(--ERROR-RED);
+  fill: var(--ERROR-RED);
 }
 
 h1 {
@@ -546,6 +557,7 @@ h1 {
 
 .title {
   width: 40em;
+  max-width: 90%;
   height: 10em;
   position: relative;
 }
@@ -596,6 +608,25 @@ h1 {
   text-align: center;
 }
 
+.borderbox {
+  border-radius: 1em;
+  outline-offset: 2px;
+  outline-style: solid;
+  outline-width: 2px;
+  outline-color: var(--DARK-GRAY);
+  margin-top: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.question-text {
+  margin: 0;
+  max-width: 90%;
+  width:25em;
+}
+
 @media screen and (orientation: portrait) {
   .transparentbox {
     height: 5em;
@@ -605,5 +636,11 @@ h1 {
   }
   .horizontalbox {
     width: 100%;
+  }
+  .question-text {
+    font-size: x-large;
+  }
+  h3 {
+    font-size: medium;
   }
 }

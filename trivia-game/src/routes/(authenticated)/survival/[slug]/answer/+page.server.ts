@@ -6,12 +6,12 @@ import { database } from "$lib/database";
 export const load: PageServerLoad = async ({ params }) => {
     //Get array of question objects
     const quizler = new SQLiteQuizler()
-    const questiondata = await quizler.loadQuestions(params.slug)
-    const score = await quizler.getScore(params.slug)
-    const currentIndex = await quizler.getCurrentIndex(params.slug)
+    const score = await quizler.SurvivalGetScore(params.slug)
+    const questiondata = await quizler.SurvivalGetQuestionData(params.slug)
+    const health = await quizler.SurvivalStepsUntilDeath(params.slug)
     if (questiondata.success) {
         //Return data with array, score and slug? (And current index)
-        return {questions: questiondata, score, slug: params.slug, currentIndex}
+        return {question: questiondata, score, slug: params.slug, health}
     }
     throw fail(400, {message: "could not fetch data"})
 }
@@ -23,15 +23,17 @@ export const actions: Actions = {
         const heat = form.get("H")?.toString()
         const slug = form.get("S")?.toString()
         const correct = form.get("C")?.toString()
-        const currentIndex = form.get("CI")?.toString()
 
-        if (slug && heat && correct && currentIndex) {
+        if (slug && heat && correct) {
             const quizler = new SQLiteQuizler()
-            const result = await quizler.submitAnswer(slug, correct=="true", parseInt(heat))
-            if (await quizler.IsEndOfRound(slug, parseInt(currentIndex))) {
-                throw redirect (302, "./choose-category")
+            const result = await quizler.SurvivalSubmitAnswer(slug, correct=="true", parseInt(heat))
+            await quizler.SurvivalLoadNewQuestion( slug )
+            const question = await quizler.SurvivalGetQuestionData(slug)
+            const health = await quizler.SurvivalStepsUntilDeath(slug)
+            if (health <= 0) {
+                throw redirect(302, "./result")
             }
-            return {result}
+            return {result, question, health}
         }
     },
 
