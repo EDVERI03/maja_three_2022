@@ -29,18 +29,19 @@ export class SQLiteAuth implements Auth {
     async register(form: FormData): Promise<LoginResult> {
 
         const username = form.get("username")!.toString()
+        const email = form.get("email")!.toString()
         const password = form.get("password")!.toString()
         const repeat = form.get("repeat")!.toString()
         if (password != repeat) {
             return {error: {code:400, data: "Password Not Repeated Correctly."}}
         }
-        if (username != undefined && password != undefined) {
-            if (!(await database.user.findUnique({where: {username}}))) {
+        if (email != undefined && username != undefined && password != undefined) {
+            if (!(await database.user.findUnique({where: {email}}))) {
                 const salt = crypto.randomBytes(16).toString('hex');
                 const hash = crypto.pbkdf2Sync(password.toString()??"", salt, 1000, 64, 'sha512').toString('hex')
                 const session = crypto.randomUUID()
                 const user = await database.user.create({data: {
-                    username, salt, hash, session
+                    username, salt, hash, email, session
 				},})
 
                 return {success: {session}}
