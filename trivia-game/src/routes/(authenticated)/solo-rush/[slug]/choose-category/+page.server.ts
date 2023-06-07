@@ -27,6 +27,6 @@ export const actions: Actions = {
                 throw redirect(302, `./answer`)
             }
         }
-        throw fail(400, {message: "Internal Error"})
+        throw fail(400, {message: "Something went Wrong"})
     }
 };
