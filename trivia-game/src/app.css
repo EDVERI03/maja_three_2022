@@ -642,7 +642,7 @@ h1 {
   }
 
   .mainbox {
-    min-height: calc(100vh - 9em - 21px);
+    min-height: calc(100vh - 8em - 21px);
   }
   .horizontalbox {
     width: 100%;
