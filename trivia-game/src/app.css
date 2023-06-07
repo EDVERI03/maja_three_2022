@@ -641,6 +641,7 @@ h1 {
   }
   .horizontalbox {
     width: 100%;
+    height: 200em;
   }
   .question-text {
     font-size: x-large;
