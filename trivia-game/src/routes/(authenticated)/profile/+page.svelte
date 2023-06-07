@@ -10,7 +10,7 @@
 <div class="transparentbox"></div>
 <Halftone></Halftone>
 <div class="mainbox">
-    <h1>{data.SRHighScore.success?.name}</h1>
+    <h1>{data.SRHighScore.success?.name||"Your Account"}</h1>
     <div>
         <cyan>
             <h1>Top Solo-Rush Score:</h1>
