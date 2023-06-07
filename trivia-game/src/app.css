@@ -642,11 +642,11 @@ h1 {
   }
 
   .mainbox {
-    min-height: calc(100vh - 18em - 21px);
+    min-height: calc(100vh - 9em - 21px);
   }
   .horizontalbox {
     width: 100%;
-    height: 1000em;
+    height: 150vh;
   }
   .question-text {
     font-size: x-large;
