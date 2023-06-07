@@ -6,7 +6,7 @@ export const actions: Actions = {
 	register: async ({ request, cookies }) => {
 		const form = await request.formData(); 
         
-        const auth = new SQLiteAuth
+        const auth = new SQLiteAuth()
 
         const result = await auth.register(form)
 
