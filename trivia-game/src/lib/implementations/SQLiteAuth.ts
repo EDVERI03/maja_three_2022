@@ -5,16 +5,16 @@ import * as crypto from "crypto"
 export class SQLiteAuth implements Auth {
     async login(form: FormData): Promise<LoginResult> {
 
-        const username = form.get("username")!.toString()
+        const email = form.get("email")!.toString()
         const password = form.get("password")!.toString()
 
         try {
-            const user = await database.user.findUniqueOrThrow({where: {username}})
+            const user = await database.user.findUniqueOrThrow({where: {email}})
             const comphash = crypto.pbkdf2Sync(password.toString()??"", user.salt, 1000, 64, 'sha512').toString('hex')
     
             if (comphash == user.hash) {
                 const session = crypto.randomUUID()
-                await database.user.update({where: {username}, data:{session}})
+                await database.user.update({where: {email}, data:{session}})
                 return {success: {session}}
             }
 
