@@ -17,7 +17,7 @@
     
     <form use:enhance method="POST" action="?/login" class="formbox">
         <h1>Sign In</h1>
-        <input type="text" name="username" id="username" placeholder="Username" class="inputbox cyan-text">
+        <input type="email" name="email" id="email" placeholder="Email" class="inputbox cyan-text">
         <input type="password" name="password" id="password" placeholder="Password" class="inputbox sky-text">
         <button type="submit" class="buttonbox peach-button">Sign In</button>
         {#if form?.result}
